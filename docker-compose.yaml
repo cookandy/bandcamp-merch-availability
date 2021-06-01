@@ -1,0 +1,15 @@
+services:
+  bandcamp:
+    environment:
+      # type of media to scrape (seperated by comma)
+      # e.g. MERCH_TYPES=Vinyl,Cassette,Floppy,Minidisc,Compact Disc (CD),Poster/Print,Other
+      - MERCH_TYPES=Vinyl,Cassette,Floppy,Minidisc,Compact Disc (CD),Poster/Print,Other
+      # time to wait between scrapes (in seconds)
+      # default is four hours
+      - SCRAPER_WAIT_SECONDS=14400
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/frontend/build/data
+      - ./config:/config

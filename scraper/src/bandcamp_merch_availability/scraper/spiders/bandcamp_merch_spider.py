@@ -7,7 +7,7 @@ import html as html_lib
 import json
 import re
 import sys
-
+import os
 
 
 MERCH_TYPE_CASSETTE = 'Cassette'
@@ -17,14 +17,11 @@ RE_FLOPPY = re.compile(r'floppy', re.IGNORECASE)
 RE_MINIDISC = re.compile(r'mini\s*disc', re.IGNORECASE)
 RE_VINYL = re.compile(r'\bvinyl\b', re.IGNORECASE)
 
+merch_types = os.environ.get('MERCH_TYPES').split(",")
 
 class BandcampMerchSpider(scrapy.Spider):
     name = 'bandcamp_merch'
-    raw_start_urls = None
-    try:
-        raw_start_urls = open('labels.txt').read().strip().split('\n')
-    except FileNotFoundError:
-        raw_start_urls = open('../../labels.txt').read().strip().split('\n')
+    raw_start_urls = open('/config/labels.txt').read().strip().split('\n')
     start_urls = [url for url in raw_start_urls if not url.startswith('#')]
 
 
@@ -113,7 +110,8 @@ class BandcampMerchSpider(scrapy.Spider):
                     'title': release['album_title'] or release['title'],
                     'url': url,
                 }
-                yield normalized_result(raw_result)
+                if raw_result['merchType'] in merch_types:
+                    yield normalized_result(raw_result)
 
 
     @staticmethod

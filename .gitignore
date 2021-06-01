@@ -152,3 +152,5 @@ src/bandcamp_merch_availability/bandcamp_merch.json
 
 .idea
 *.iml
+
+data/bandcamp_merch.json
